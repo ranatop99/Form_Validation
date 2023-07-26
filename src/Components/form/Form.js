@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Form.css";
+import { Box, TextField } from "@mui/material";
+
+
 const Form = ({ handleSubmit }) => {
   const COUNTRY = "Nepal";
-
+  const PROVINCE = "3";
   const initialValues = {
     fullname: "",
     email: "",
@@ -10,24 +13,62 @@ const Form = ({ handleSubmit }) => {
     dob: "",
     city: "",
     district: "",
-    province: "",
+    province: PROVINCE,
     country: COUNTRY,
   };
 
   const [personaldetails, setPersonalDetails] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState({});
+  const [isClick, setIsClick] = useState(false);//
 
   const formHandler = (event) => {
+    setIsClick(true);
     event.preventDefault();
-    handleSubmit(personaldetails);
-    setPersonalDetails(initialValues);
+    setFormErrors(validate(personaldetails)); //
+  };
+
+  function isFormValid() {
+    if (Object.keys(formErrors).length <= 0 && isClick == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  useEffect(() => {
+    console.log(formErrors)
+    if (isFormValid()) {
+      handleSubmit(personaldetails)
+      setIsClick(false)
+      setPersonalDetails(initialValues);
+    }
+  }, [formErrors])
+
+  const validate = (values) => { //
+    const errors = {};
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!values.fullname) {
+      errors.fullname = "Fullname is required"
+    }
+    if (!values.email) {
+      errors.email = "Email is required";
+    } else if (!regex.test(values.email)) {
+      errors.email = "This is not a valid email format";
+    }
+    if (!values.phonenumber) {
+      errors.phonenumber = "Phonenumber is required"
+    } else if (values.phonenumber.length < 7) {
+      errors.phonenumber = "Phonenumber must be 7 digits"
+    }
+    return errors;
   };
 
   return (
     <div>
       <h1 className="heading_title">User Signup Form</h1>
       <form className="form_container" onSubmit={(event) => formHandler(event)}>
-        <div>
-          <label htmlFor="fullname">Name : </label>
+        <div className="form__control">
+          <label htmlFor="fullname">Name<span style={{ color: "red" }}>*</span></label>
           <input
             type="text"
             placeholder="Enter your name"
@@ -42,8 +83,9 @@ const Form = ({ handleSubmit }) => {
             }
           />
         </div>
-        <div>
-          <label htmlFor="email">Email : </label>
+        <p className="error">{formErrors.fullname}</p>
+        <div className="form__control">
+          <label htmlFor="email">Email<span style={{ color: "red" }}>*</span> </label>
           <input
             type="email"
             placeholder="Enter your email"
@@ -58,10 +100,12 @@ const Form = ({ handleSubmit }) => {
             }
           />
         </div>
-        <div>
-          <label htmlFor="phonenumber">Phone Number : </label>
+        <p className="error">{formErrors.email}</p>
+        <div className="form__control">
+          <label htmlFor="phonenumber">Phone Number<span style={{ color: "red" }}>*</span>  </label>
           <input
-            type="tel"
+            type="number"
+
             placeholder="+977 XXXXXX"
             name="phonenumber"
             id="phonenumber"
@@ -74,9 +118,9 @@ const Form = ({ handleSubmit }) => {
             }
           />
         </div>
-
-        <div>
-          <label htmlFor="dob">DOB : </label>
+        <p className="error">{formErrors.phonenumber}</p>
+        <div className="form__control">
+          <label htmlFor="dob">DOB  </label>
           <input
             type="date"
             placeholder="Enter your Date of Birth"
@@ -91,11 +135,10 @@ const Form = ({ handleSubmit }) => {
             }
           />
         </div>
-        <div>
-          <label>Address :</label>
+        <div className="form__control">
           <div>
             <div>
-              <label htmlFor="city">City : </label>
+              <label htmlFor="city">City  </label>
               <input
                 type="text"
                 placeholder="Enter your City"
@@ -110,8 +153,8 @@ const Form = ({ handleSubmit }) => {
                 }
               />
             </div>
-            <div>
-              <label htmlFor="district">District : </label>
+            <div className="form__control">
+              <label htmlFor="district">District  </label>
               <input
                 type="text"
                 placeholder="Enter your District"
@@ -126,11 +169,12 @@ const Form = ({ handleSubmit }) => {
                 }
               />
             </div>
-            <div>
-              <label htmlFor="provinces">Province : </label>
+            <div className="form__control">
+              <label htmlFor="provinces">Province  </label>
               <select
                 id="provinces"
                 name="provinces"
+                defaultValue={personaldetails.province}
                 onChange={(event) =>
                   setPersonalDetails({
                     ...personaldetails,
@@ -147,8 +191,8 @@ const Form = ({ handleSubmit }) => {
                 <option value="7">7</option>
               </select>
             </div>
-            <div>
-              <label htmlFor="country">Country : </label>
+            <div className="form__control">
+              <label htmlFor="country">Country  </label>
               <select
                 id="country"
                 name="country"

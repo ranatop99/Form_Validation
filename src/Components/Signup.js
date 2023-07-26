@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Profile from "../Pages/Profile";
 import "./Signup.css";
 import List from "./list/List";
 import Form from "./form/Form";
 import Modal from "react-modal";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 const Signup = () => {
   const [detailstorages, setDetailsStorages] = useState([]);
@@ -39,7 +45,7 @@ const Signup = () => {
   }
 
   return (
-    <div>
+    <div className="main">
       <div className="main_container">
         <Form handleSubmit={handleSubmit} />
       </div>
@@ -53,36 +59,40 @@ const Signup = () => {
         <Form handleSubmit={handleSubmit} />
       </Modal>
 
-      <div className="display_section">
-        <div className="details_section">
-          <div className="input_details">
-            <table>
-              <tr>
-                <th>Fullname</th>
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Date of Birth</th>
-                <th>City</th>
-                <th>District</th>
-                <th>Province</th>
-                <th>Country</th>
-              </tr>
+      <br />
+      <br />
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ fontFamily: "Poppins" }} align="center" >Fullname</TableCell>
+              <TableCell style={{ fontFamily: "Poppins" }} align="center">Email</TableCell>
+              <TableCell style={{ fontFamily: "Poppins" }} align="center">Phone Number</TableCell>
+              <TableCell style={{ fontFamily: "Poppins" }} align="center">Date of Birth</TableCell>
+              <TableCell style={{ fontFamily: "Poppins" }} align="center">City</TableCell>
+              <TableCell style={{ fontFamily: "Poppins" }} align="center">District</TableCell>
+              <TableCell style={{ fontFamily: "Poppins" }} align="center">Province</TableCell>
+              <TableCell style={{ fontFamily: "Poppins" }} align="center">Country</TableCell>
+              <TableCell style={{ fontFamily: "Poppins" }} align="center">Action</TableCell>
+              <TableCell style={{ fontFamily: "Poppins" }} align="center">Profile</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
 
-              {detailstorages.map((details, index) => {
-                return (
-                  <List
-                    key={index}
-                    details={details}
-                    deleteHandler={deleteHandler}
-                    updateStatus={updateStatus}
-                  />
-                );
-              })}
-            </table>
-          </div>
-          <Profile />
-        </div>
-      </div>
+            {detailstorages.map((details, index) => {
+              return (
+                <List
+                  key={index}
+                  details={details}
+                  deleteHandler={deleteHandler}
+                  updateStatus={updateStatus}
+                  handleSubmit={handleSubmit}
+                />
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };

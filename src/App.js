@@ -1,9 +1,14 @@
 import Signup from "./Components/Signup";
+import Profile from "./Pages/Profile";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Signup />
+      <Routes>
+        <Route path="/" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
     </>
   );
 }
