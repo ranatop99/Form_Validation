@@ -19,6 +19,7 @@ const Form = ({ handleSubmit }) => {
   const formHandler = (event) => {
     event.preventDefault();
     handleSubmit(personaldetails);
+    setPersonalDetails(initialValues);
   };
 
   return (
